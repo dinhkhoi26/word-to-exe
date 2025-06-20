@@ -1,0 +1,30 @@
+name: Build EXE
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install pyinstaller pdf2image pillow
+
+      - name: Build EXE
+        run: pyinstaller --onefile --noconsole word_to_image.py
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: word_to_image_exe
+          path: dist/word_to_image.exe
+
