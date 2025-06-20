@@ -2,29 +2,32 @@ name: Build EXE
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build:
     runs-on: windows-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - name: 🧾 Checkout code
+        uses: actions/checkout@v3
 
-      - name: Setup Python
+      - name: 🐍 Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
+          python-version: '3.10'
 
-      - name: Install dependencies
-        run: pip install pyinstaller pdf2image pillow
+      - name: 📦 Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pillow pyinstaller pypiwin32
 
-      - name: Build EXE
-        run: pyinstaller --onefile --noconsole word_to_image.py
+      - name: 🏗️ Build .exe
+        run: |
+          pyinstaller --onefile --noconsole word_to_image.py
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v3
+      - name: 📦 Upload EXE
+        uses: actions/upload-artifact@v4
         with:
           name: word_to_image_exe
-          path: dist/word_to_image.exe
+          path: dist/*.exe
 
